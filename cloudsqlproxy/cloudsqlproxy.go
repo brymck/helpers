@@ -33,7 +33,7 @@ func defaultConnectionPoolConfiguration() *ConnectionPoolConfiguration {
 		DatabaseUsername:       os.Getenv("DB_USER"),
 		DatabasePassword:       os.Getenv("DB_PASS"),
 		TcpHost:                os.Getenv("DB_TCP_HOST"),
-		InstanceConnectionName: os.Getenv("INSTANCE_CONNECION_NAME"),
+		InstanceConnectionName: os.Getenv("INSTANCE_CONNECTION_NAME"),
 		MaxIdleConns:           5,
 		MaxOpenConns:           7,
 		ConnMaxLifetime:        1800,
