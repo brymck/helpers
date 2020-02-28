@@ -20,7 +20,14 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -v .
+      run: go build -v ./...
     
     - name: Run tests
       run: go test -race -coverprofile=profile.out -covermode=atomic ./...
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./profile.out
+        fail_ci_if_error: false
