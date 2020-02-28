@@ -10,7 +10,7 @@ import (
 )
 
 type WebApp interface {
-	routes() http.Handler
+	Routes() http.Handler
 }
 
 func Serve(app WebApp) {
@@ -18,7 +18,7 @@ func Serve(app WebApp) {
 
 	srv := &http.Server{
 		Addr:         ":" + port,
-		Handler:      app.routes(),
+		Handler:      app.Routes(),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
