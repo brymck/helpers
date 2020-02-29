@@ -44,6 +44,6 @@ func AccessSecret(secretId string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to access secret: %v", err)
 	}
-	log.Infof("used Secrets Manager to retrieve secret %s", envKey)
+	log.Infof("used Secrets Manager to retrieve secret %s", secretId)
 	return string(result.Payload.Data), nil
 }
