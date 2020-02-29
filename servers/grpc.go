@@ -11,12 +11,12 @@ import (
 	"github.com/brymck/helpers/env"
 )
 
-type ListenerServer struct {
-	Listener *net.Listener
-	Server *grpc.Server
+type GrpcServer struct {
+	listener *net.Listener
+	Server   *grpc.Server
 }
 
-func Listen() *ListenerServer {
+func Listen() *GrpcServer {
 	// Start server
 	port := env.GetPort("8080")
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
@@ -25,12 +25,12 @@ func Listen() *ListenerServer {
 	}
 	log.Infof("listening for gRPC on port %s", port)
 	server := grpc.NewServer()
-	return &ListenerServer{Listener: &listener, Server: server}
+	return &GrpcServer{listener: &listener, Server: server}
 }
 
-func Serve(ls *ListenerServer) {
+func (ls *GrpcServer) Serve() {
 	reflection.Register(ls.Server)
-	err := ls.Server.Serve(*ls.Listener)
+	err := ls.Server.Serve(*ls.listener)
 	if err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
