@@ -16,7 +16,7 @@ type GrpcServer struct {
 	Server   *grpc.Server
 }
 
-func Listen() *GrpcServer {
+func NewGrpcServer() *GrpcServer {
 	// Start server
 	port := env.GetPort("8080")
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
