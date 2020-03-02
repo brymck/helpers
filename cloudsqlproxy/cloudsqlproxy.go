@@ -23,7 +23,7 @@ type ConnectionPoolConfiguration struct {
 	MaxIdleConns int
 	// Maximum number of open connections to the database
 	MaxOpenConns int
-	// Maximum time (in seconds) that a connection can remain open
+	// Maximum time that a connection can remain open
 	ConnMaxLifetime time.Duration
 }
 
@@ -36,7 +36,7 @@ func defaultConnectionPoolConfiguration() *ConnectionPoolConfiguration {
 		InstanceConnectionName: os.Getenv("INSTANCE_CONNECTION_NAME"),
 		MaxIdleConns:           5,
 		MaxOpenConns:           7,
-		ConnMaxLifetime:        1800,
+		ConnMaxLifetime:        30 * time.Minute,
 	}
 }
 
