@@ -56,7 +56,7 @@ func NewConnectionPool(config *ConnectionPoolConfiguration) (*sql.DB, error) {
 
 func initSocketConnectionPool(config *ConnectionPoolConfiguration) (*sql.DB, error) {
 	connectionString := fmt.Sprintf(
-		"%s:%s@unix(/cloudsql/%s)/%s",
+		"%s:%s@unix(/cloudsql/%s)/%s?parseTime=true",
 		config.DatabaseUsername,
 		config.DatabasePassword,
 		config.InstanceConnectionName,
@@ -75,7 +75,7 @@ func initSocketConnectionPool(config *ConnectionPoolConfiguration) (*sql.DB, err
 
 func initTcpConnectionPool(config *ConnectionPoolConfiguration) (*sql.DB, error) {
 	connectionString := fmt.Sprintf(
-		"%s:%s@tcp(%s)/%s",
+		"%s:%s@tcp(%s)/%s?parseTime=true",
 		config.DatabaseUsername,
 		config.DatabasePassword,
 		config.TcpHost,
