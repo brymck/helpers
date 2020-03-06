@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -12,6 +13,10 @@ const timeBeforeExpiryToRenew = 30 * time.Second
 
 type payload struct {
 	ExpiresAt int64 `json:"exp"`
+}
+
+func createAuthorizationMetadata(token string) map[string]string {
+	return map[string]string{"authorization": fmt.Sprintf("Bearer %s", token)}
 }
 
 func decodeJwtToken(token string) (*payload, error) {

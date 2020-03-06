@@ -47,7 +47,7 @@ func (a *metadataTokenAuth) refresh() error {
 		}
 		a.token = text
 		a.validUntil = expiresAt.Add(-timeBeforeExpiryToRenew)
-		a.metadata = map[string]string{"authorization": fmt.Sprintf("Bearer %s", a.token)}
+		a.metadata = createAuthorizationMetadata(a.token)
 	}
 	return nil
 }

@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 	"time"
 )
@@ -20,7 +19,7 @@ func newLocalTokenAuth() *localTokenAuth {
 	if err != nil {
 		panic(err)
 	}
-	metadata := map[string]string{"authorization": fmt.Sprintf("Bearer %s", token)}
+	metadata := createAuthorizationMetadata(token)
 	return &localTokenAuth{token: token, validUntil: expiry, metadata: metadata}
 }
 
