@@ -10,34 +10,21 @@ import (
 	"github.com/brymck/helpers/internal/auth"
 )
 
-type Service interface {
-	Connect() (*grpc.ClientConn, error)
-	MustConnect() *grpc.ClientConn
-}
-
-type service struct {
-	name string
-}
-
 const (
 	serviceAddressTemplate = "%s-4tt23pryoq-an.a.run.app:443"
 	serviceUrlTemplate     = "https://%s-4tt23pryoq-an.a.run.app"
 	tokenUrlTemplate       = "/instance/service-accounts/default/identity?audience=%s"
 )
 
-func NewService(name string) *service {
-	return &service{name: name}
-}
-
-func (s *service) Connect() (*grpc.ClientConn, error) {
+func Connect(serviceName string) (*grpc.ClientConn, error) {
 	pool, _ := x509.SystemCertPool()
 	ce := credentials.NewClientTLSFromCert(pool, "")
 
-	audience := fmt.Sprintf(serviceUrlTemplate, s.name)
+	audience := fmt.Sprintf(serviceUrlTemplate, serviceName)
 	tokenUrl := fmt.Sprintf(tokenUrlTemplate, audience)
 	creds := auth.NewAuth(tokenUrl)
 
-	serviceAddress := fmt.Sprintf(serviceAddressTemplate, s.name)
+	serviceAddress := fmt.Sprintf(serviceAddressTemplate, serviceName)
 	conn, err := grpc.Dial(
 		serviceAddress,
 		grpc.WithTransportCredentials(ce),
@@ -49,8 +36,8 @@ func (s *service) Connect() (*grpc.ClientConn, error) {
 	return conn, nil
 }
 
-func (s *service) MustConnect() *grpc.ClientConn {
-	conn, err := s.Connect()
+func MustConnect(serviceName string) *grpc.ClientConn {
+	conn, err := Connect(serviceName)
 	if err != nil {
 		panic(err)
 	}
