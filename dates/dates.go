@@ -1,13 +1,17 @@
 package dates
 
-import "time"
+import (
+	"time"
+
+	log "github.com/sirupsen/logrus"
+)
 
 const (
 	EndOfDayHour = 17
 )
 
 var (
-	easternTime *time.Location
+	timezone *time.Location
 )
 
 type ProtoDate interface {
@@ -28,14 +32,15 @@ func ProtoDateToTime(pd ProtoDate) time.Time {
 	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
 }
 
-func LatestBusinessDate() (time.Time, error) {
+func LatestBusinessDate() time.Time {
 	var err error
-	easternTime, err = time.LoadLocation("America/New_York")
+	timezone, err = time.LoadLocation("America/New_York")
 	if err != nil {
-		return time.Time{}, err
+		log.Warn("could not load America/New_York timezone, falling back to UTC")
+		timezone = time.UTC
 	}
 
-	date := time.Now().In(easternTime)
+	date := time.Now().In(timezone)
 	switch date.Weekday() {
 	case time.Monday:
 		if date.Hour() < EndOfDayHour {
@@ -51,5 +56,5 @@ func LatestBusinessDate() (time.Time, error) {
 		}
 	}
 	year, month, day := date.Date()
-	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC), nil
+	return time.Date(year, month, day, 0, 0, 0, 0, time.UTC)
 }
