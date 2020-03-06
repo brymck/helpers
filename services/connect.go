@@ -43,3 +43,28 @@ func MustConnect(serviceName string) *grpc.ClientConn {
 	}
 	return conn
 }
+
+func ConnectLocally(addr string) (*grpc.ClientConn, error) {
+	pool, _ := x509.SystemCertPool()
+	ce := credentials.NewClientTLSFromCert(pool, "")
+
+	creds := auth.NewAuth("")
+
+	conn, err := grpc.Dial(
+		addr,
+		grpc.WithTransportCredentials(ce),
+		grpc.WithPerRPCCredentials(creds),
+	)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+func MustConnectLocally(addr string) *grpc.ClientConn {
+	conn, err := ConnectLocally(addr)
+	if err != nil {
+		panic(err)
+	}
+	return conn
+}
