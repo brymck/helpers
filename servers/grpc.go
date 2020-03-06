@@ -16,9 +16,11 @@ type GrpcServer struct {
 	Server   *grpc.Server
 }
 
+const DefaultPort = "8080"
+
 func NewGrpcServer() *GrpcServer {
 	// Start server
-	port := env.GetPort("8080")
+	port := env.GetPort(DefaultPort)
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
