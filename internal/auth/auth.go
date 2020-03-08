@@ -18,6 +18,10 @@ func NewAuth(tokenUrl string) *auth {
 	if isOnCloudRun() {
 		return &auth{newMetadataTokenAuth(tokenUrl)}
 	} else {
-		return &auth{newLocalTokenAuth()}
+		if os.Getenv("BRYMCK_IO_API_KEY") != "" {
+			return &auth{newApiKeyAuth()}
+		} else {
+			return &auth{newLocalTokenAuth()}
+		}
 	}
 }
