@@ -15,7 +15,7 @@ func newApiKeyAuth() *apiKeyAuth {
 	if apiKey == "" {
 		panic("no value for environment variable BRYMCK_IO_API_KEY")
 	}
-	metadata := map[string]string{"x-api-key": apiKey}
+	metadata := map[string]string{"x-api-key": apiKey, "x-goog-api-key": apiKey}
 	return &apiKeyAuth{apiKey: apiKey, metadata: metadata}
 }
 
