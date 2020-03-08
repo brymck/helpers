@@ -9,7 +9,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-
 type metadataTokenAuth struct {
 	tokenUrl   string
 	validUntil time.Time
