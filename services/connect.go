@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/x509"
 	"fmt"
+	"os"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -16,6 +17,15 @@ const (
 	tokenUrlTemplate       = "/instance/service-accounts/default/identity?audience=%s"
 )
 
+func getServiceAddress(serviceName string) string {
+	if os.Getenv("BRYMCK_IO_API_KEY") != "" {
+		// If we have an API key, direct all requests through the gateway
+		return fmt.Sprintf(serviceAddressTemplate, "gateway")
+	} else {
+		return fmt.Sprintf(serviceAddressTemplate, serviceName)
+	}
+}
+
 func Connect(serviceName string) (*grpc.ClientConn, error) {
 	pool, _ := x509.SystemCertPool()
 	ce := credentials.NewClientTLSFromCert(pool, "")
@@ -24,7 +34,7 @@ func Connect(serviceName string) (*grpc.ClientConn, error) {
 	tokenUrl := fmt.Sprintf(tokenUrlTemplate, audience)
 	creds := auth.NewAuth(tokenUrl)
 
-	serviceAddress := fmt.Sprintf(serviceAddressTemplate, serviceName)
+	serviceAddress := getServiceAddress(serviceName)
 	conn, err := grpc.Dial(
 		serviceAddress,
 		grpc.WithTransportCredentials(ce),
